@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fake News Detection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="app-page">
+
+
+
+<div class="container">
+    <div class="profile">
+  <img id="userPhoto" src="" alt="User Photo">
+  <h3 id="userName"></h3>
+  <p id="userEmail"></p>
+</div>
+
+  <h1>📰 Fake News Detection Tool</h1>
+
+  <textarea id="newsInput" placeholder="Paste news text here..."></textarea>
+
+  <button onclick="checkNews()">Check News</button>
+  <button onclick="clearAll()" class="clear-btn">Clear</button>
+
+
+  <div id="result"></div>
+  <div class="confidence-box">
+  <div class="confidence-label">Confidence</div>
+  <div class="confidence-bar">
+    <div id="confidence-fill"></div>
+  </div>
+  <div id="confidence-text"></div>
+</div>
+
+  <div id="emotion"></div>
+
+
+  <button class="logout" onclick="logout()">Logout</button>
+</div>
+
+
+<script src="firebase.js" type="module"></script>
+<script src="script.js"></script>
+
+<script type="module">
+  import { onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("userName").innerText =
+        user.displayName || "User";
+
+      document.getElementById("userEmail").innerText =
+        user.email || "";
+
+      document.getElementById("userPhoto").src =
+        user.photoURL || "https://via.placeholder.com/80";
+    }
+  });
+
+  window.logout = function () {
+    signOut(auth).then(() => {
+      window.location.href = "index.html";
+    });
+  };
+</script>
+<audio id="sound-real" src="sounds/real.mp3"></audio>
+<audio id="sound-fake" src="sounds/fake.mp3"></audio>
+<audio id="sound-unsure" src="sounds/unsure.mp3"></audio>
+
+
+</body>
+</html>
